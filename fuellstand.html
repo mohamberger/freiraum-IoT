@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css">
+  <script type="application/javascript">
+  var dist = 25;
+    function draw() {
+    <!--  var dist = {{WT_ABSTAND}}; -->
+	<!-- Hier zum Testen einen Messwert fest eintragen -->
+	
+  
+	var hoehe = 38;
+	var breite = 37;
+	
+    var scale = 5.5;
+    var x = 0;
+      var canvas = document.getElementById('canvas');
+      if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+    
+    <!-- Füllstand ok -->
+    if (dist <= 25) {
+      ctx.fillStyle = 'rgb(206, 239, 255)';
+	} else {
+	
+		if (dist < 35) {
+				<!-- Füllstand knapp -->
+				ctx.fillStyle = 'rgb(255, 204, 0)';
+			} else {
+			    <!-- Füllstand kritisch -->
+				ctx.fillStyle = 'rgb(255, 0, 0)';
+		}
+	}	
+      
+     <!-- Rechteck -->
+      ctx.beginPath();
+      ctx.moveTo(0, scale * dist);
+      ctx.lineTo(scale * breite, scale * dist);
+	  ctx.lineTo(scale * breite, scale * hoehe);
+      ctx.lineTo(0, scale * hoehe);
+      
+	  
+	  ctx.fill();
+    
+  
+    
+
+   
+    
+    <!-- Linie max. Füllstand -->
+    ctx.lineWidth = 1;
+    ctx.setLineDash([10, 15]);
+    ctx.beginPath();
+        ctx.moveTo(0, scale * 10);
+    ctx.lineTo(scale * breite, scale * 10)
+    ctx.closePath();
+    ctx.stroke();
+    
+    
+    <!-- Text -->
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.font = '16px sans-serif';
+    ctx.textAlign = 'center';
+        ctx.fillText('Füllstand Wassertank', scale * breite/2, scale * 6.5);
+      }
+    }
+    </script>
+    
+  <title>IoT Espressomaschine</title>
+  <style type="text/css">
+      canvas { border: 0px solid black;  margin-top: 5px;}
+  </style>
+</head>
+
+<body onload="draw();" class="shadow-lg">
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="/">
+        <b class="">IoT Espressomaschine</b>
+      </a> </div>
+  </nav>
+  <div class="">
+    <div class="container text-center w-100">
+      <!-- Canvas -->
+      <div class="row">
+        <div id="fuellstand" class="col-md-12"><canvas id="canvas" width="209" height="275"></canvas></div>
+      </div>
+      <div class="row">
+        <div id="action_button_refresh" class="col-md-12">
+          <!-- Platzhalter für Button zum Testen -->
+          <!-- <div id="action_button" class="btn-group btn-group-vertical w-hoehe py-1"> <a class="btn py-2 text-light btn-danger btn-lg active" id="open_button">Relais EIN</a><a class="btn py-2 text-light btn-primary btn-lg active" id="close_button">Relais AUS</a></div> -->
+          <!-- <div id="action_button" class="btn-group btn-group-vertical w-75 py-1"> <a href="{{BTN_ACTION}}" class="btn btn-block py-1 text-light {{BTN_COLOR}}" id="relay_button">{{BTN_TEXT}}</a></div>  -->
+        </div>
+      </div>
+      <div class="shadow-lg">
+        <div id="refresh" class="container-fluid bg-light text-dark">
+          <div id="status" class="row">
+              <!-- <div class="btn-group btn-group-vertical w-100 py-1"> <a href="{{BTN_ACTION}}" class="btn btn-block py-1 text-light {{BTN_COLOR}}" id="relay_button">{{BTN_TEXT}}</a></div> -->
+			  <!-- Platzhalter für Button zum Testen -->
+			  <div class="btn-group btn-group-vertical w-100 py-1"> <a href="#" class="btn btn-block py-1 text-light btn-danger" id="relay_button">Dummy Action</a></div>
+            <!--
+              <div class="col-md-4 text-center {{STATUS_OFEN_COLOR}}">
+              {{STATUS_OFEN}}
+              </div>
+            -->
+              <div class="col-md-4 text-center">
+              {{STATUS}}
+              </div>
+              
+              <div class="col-md-4 text-center {{STATUS_WT_COLOR}}">
+              {{WT_ABSTAND}}
+              </div>
+            
+          </div>
+        </div>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script type="text/javascript">
+        setInterval("status_refresh();", 1000);
+        
+        function status_refresh() {
+          var element = document.getElementById('canvas');
+          var canvas = element.getContext('2d');
+          canvas.clearRect(0,0,209,275);  
+          $('#refresh').load(location.href + ' #status');
+		      draw();
+        }
+
+      
+      </script>
+	  
+      <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="shahoehe4-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="shahoehe4-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="shahoehe4-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" style=""></script>      
+    </div>
+  </div>
+  
+</body>
+
+</html>
